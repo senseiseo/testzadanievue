@@ -6,6 +6,7 @@
      <br>
      <br>
      <table class="filters__table" style="width: 600px;">
+
               <thead style="background: #fc18">
                <tr>
                 <td> Организация 
@@ -34,6 +35,7 @@
                 </td>
                </tr> 
               </thead>
+
               <tbody  style="background: #ccc">
                <tr v-for="item in items" v-bind:key="item.id">
                 <td> {{item.organization}} </td>
@@ -43,12 +45,13 @@
                 <td> {{item.applicant}} </td>
                 <td> {{item.name}} </td> 
                 <td> {{item.performer}} </td>
-                <td> {{time}} </td>
+                <td> {{item.time}} </td>
                 <button :data-id="item.id" type="button" class="edit" v-bind:id="item.id" @click="openEditRequestForm">Редактировать заявку</button>
                 <button type="button" class="delete" @click="deleteRequest">Удалить заявку</button>
                </tr> 
               </tbody>
              </table>
+
              <div class="edit-request hidden" id="edit-request-popup">
               <form class="edit-request__form" @submit.prevent="editRequest" id="popup-form">
                 <p class="edit-request__item">
@@ -81,7 +84,7 @@
                 </p>
                 <p class="edit-request__item">
                   <label for="time">Время</label>
-                  <input type="time" id="performer" name="performer" :value="currentRow.time" required>
+                  <input type="time" id="time" name="time" :value="currentRow.time" required>
                 </p>
                   <input type="hidden" name="id" :value="currentRow.id">
                 <button id="request-edit-btn" type="submit">Редактировать запись</button>
@@ -93,41 +96,40 @@
              <form class="add-request__form" @submit.prevent="addRequest" id="add-popup-form">
                <p class="add-request__item">
                  <label for="organization">Организация</label>
-                 <input type="text" id="organization" name="organization" :value="currentRow.organization" required>
+                 <input type="text" id="organization" name="organization" :value="organization" required>
                </p>
                <p class="add-request__item">
                  <label for="status">Статус</label>
-                 <input type="text" id="status" name="status" :value="currentRow.status" required>
+                 <input type="text" id="status" name="status" :value="status" required>
                </p>
                <p class="add-request__item">
                  <label for="priority">Приоритет</label>
-                 <input type="text" id="priority" name="priority" :value="currentRow.priority" required>
+                 <input type="text" id="priority" name="priority" :value="priority" required>
                </p>
                <p class="add-request__item">
                  <label for="type">Тип</label>
-                 <input type="text" id="type" name="type" :value="currentRow.type" required>
+                 <input type="text" id="type" name="type" :value="type" required>
                </p>
                <p class="add-request__item">
                  <label for="applicant">Заявитель</label>
-                 <input type="text" id="applicant" name="applicant" :value="currentRow.applicant" required>
+                 <input type="text" id="applicant" name="applicant" :value="applicant" required>
                </p>
                <p class="add-request__item">
                  <label for="name">Наименование</label>
-                 <input type="text" id="name" name="name" :value="currentRow.name" required>
+                 <input type="text" id="name" name="name" :value="name" required>
                </p>
                <p class="add-request__item">
                  <label for="performer">Исполнитель</label>
-                 <input type="text" id="performer" name="performer" :value="currentRow.performer" required>
+                 <input type="text" id="performer" name="performer" :value="performer" required>
                </p>
                <p class="add-request__item">
                  <label for="time">Время</label>
-                 <input type="time" id="time" name="time" :value="currentRow.time" required>
+                 <input type="time" id="time" name="time" :value="time" required>
                </p>
-                 <input type="hidden" name="id" :value="currentRow.id">
+                 <input type="hidden" name="id" :value="id">
                <button id="add-request-btn" type="submit">Добавить запись</button>
                <button type="button" @click="closePopup">Закрыть</button>
              </form>
-
             </div>
   </div>
   
@@ -140,40 +142,40 @@ export default {
   data() {
     return {
       // создаем массив данных
-      timeValue: new Date(),
+      
      items: [           
        {
          id: 1,
-         organization: 'Нефтяная 1',
+         organization: 'Компания 1',
          status: 'Принята',
          priority: 'Средний',
          type: 'Сообщение об ошибке',
          applicant: 'Иванов',
          name: 'Тестовая заявка',
          performer: 'Петров',
-         time: 'timeValue'
+         time: '12:22'
        },
        {
          id: 2,
-         organization: 'Нефтяная 2',
+         organization: 'Компания 2',
          status: 'Отказано',
          priority: 'Низкий',
          type: 'Сообщение об улучшении',
          applicant: 'Махмутов',
          name: 'Тестовая заявка',
          performer: 'Шайдуллин',
-         time: 'timeValue' 
+         time: '12:48'
        },
        {
          id: 3,
-         organization: 'Нефтяная 3',
+         organization: 'Компания 3',
          status: 'Принята',
          priority: 'Высокий',
          type: 'Заявка на установку',
          applicant: 'Максимов',
          name: 'Тестовая заявка',
          performer: 'Ахметов',
-         time: 'timeValue' 
+         time: '12:33'
        }
      ],
      //создаем текущий массив для создание новой заявки
@@ -201,6 +203,7 @@ export default {
     addRequest() {
       let form = document.getElementById('add-popup-form'); 
       let lastId = this.items[this.items.length - 1].id + 1;
+      console.log(lastId)
       let id = lastId;
       let organization = form.elements.organization.value;
       let status = form.elements.status.value;
@@ -209,9 +212,9 @@ export default {
       let applicant = form.elements.applicant.value;
       let name = form.elements.name.value;
       let performer = form.elements.performer.value;
-      let timeValue = form.elements.timeValue.value;
+      let time = form.elements.time.value;
       let obj = {
-        id, organization, status, priority, type, applicant, name, performer,timeValue
+        id, organization, status, priority, type, applicant, name, performer,time
       };
       this.items.push(obj);
     },
@@ -232,9 +235,9 @@ export default {
       let applicant = form.elements.applicant.value;
       let name = form.elements.name.value;
       let performer = form.elements.performer.value;
-      let timeValue = form.elements.timeValue.value;
+      let time = form.elements.time.value;
       let obj = {
-        id, organization, status, priority, type, applicant, name, performer,timeValue
+        id, organization, status, priority, type, applicant, name, performer,time
       };
       for(let i in this.items) {
         if(obj.id == this.items[i].id) {
@@ -261,7 +264,7 @@ export default {
       this.currentRow.applicant = obj.applicant;
       this.currentRow.name = obj.name;
       this.currentRow.performer = obj.performer;
-      this.currentRow.timeValue = obj.time;
+      this.currentRow.time = obj.time;
     },
     //закрытие окна редактирования окна
     closePopup(event) {
