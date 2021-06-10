@@ -1,6 +1,6 @@
 <template>
   <div>
-   //hello ///
+   <h1> {{timeValue}} </h1>
 
      <button type="button" id="add-request" v-on:click="openAddPopup">Добавить заявку</button>
      <br>
@@ -29,6 +29,9 @@
                 <td> Исполнитель 
                   <button type="button" class="filters__button">BUTTON</button>
                 </td>
+                <td> Время 
+                  <button type="button" class="filters__button">BUTTON</button>
+                </td>
                </tr> 
               </thead>
               <tbody  style="background: #ccc">
@@ -40,6 +43,7 @@
                 <td> {{item.applicant}} </td>
                 <td> {{item.name}} </td> 
                 <td> {{item.performer}} </td>
+                <td> {{time}} </td>
                 <button :data-id="item.id" type="button" class="edit" v-bind:id="item.id" @click="openEditRequestForm">Редактировать заявку</button>
                 <button type="button" class="delete" @click="deleteRequest">Удалить заявку</button>
                </tr> 
@@ -74,6 +78,10 @@
                 <p class="edit-request__item">
                   <label for="performer">Исполнитель</label>
                   <input type="text" id="performer" name="performer" :value="currentRow.performer" required>
+                </p>
+                <p class="edit-request__item">
+                  <label for="time">Время</label>
+                  <input type="time" id="performer" name="performer" :value="currentRow.time" required>
                 </p>
                   <input type="hidden" name="id" :value="currentRow.id">
                 <button id="request-edit-btn" type="submit">Редактировать запись</button>
@@ -111,6 +119,10 @@
                  <label for="performer">Исполнитель</label>
                  <input type="text" id="performer" name="performer" :value="currentRow.performer" required>
                </p>
+               <p class="add-request__item">
+                 <label for="time">Время</label>
+                 <input type="time" id="time" name="time" :value="currentRow.time" required>
+               </p>
                  <input type="hidden" name="id" :value="currentRow.id">
                <button id="add-request-btn" type="submit">Добавить запись</button>
                <button type="button" @click="closePopup">Закрыть</button>
@@ -124,45 +136,47 @@
 <script>
 export default {
   name: 'TestTable',
-  props: {
-   name: String
-  },
+ 
   data() {
     return {
-      // создаем массив данных 
+      // создаем массив данных
+      timeValue: new Date(),
      items: [           
        {
          id: 1,
-         organization: 'Мех-Сервис',
+         organization: 'Нефтяная 1',
          status: 'Принята',
          priority: 'Средний',
          type: 'Сообщение об ошибке',
          applicant: 'Иванов',
          name: 'Тестовая заявка',
-         performer: 'Петров'  
+         performer: 'Петров',
+         time: 'timeValue'
        },
        {
          id: 2,
-         organization: 'ЦАП',
+         organization: 'Нефтяная 2',
          status: 'Отказано',
          priority: 'Низкий',
          type: 'Сообщение об улучшении',
          applicant: 'Махмутов',
          name: 'Тестовая заявка',
-         performer: 'Шайдуллин'  
+         performer: 'Шайдуллин',
+         time: 'timeValue' 
        },
        {
          id: 3,
-         organization: 'Энерго-сервис',
+         organization: 'Нефтяная 3',
          status: 'Принята',
-         priority: 'Средний',
+         priority: 'Высокий',
          type: 'Заявка на установку',
          applicant: 'Максимов',
          name: 'Тестовая заявка',
-         performer: 'Ахметов'  
+         performer: 'Ахметов',
+         time: 'timeValue' 
        }
      ],
-     //создаем пустой массив
+     //создаем текущий массив для создание новой заявки
      currentRow: {
        id: '',
        organization: '',
@@ -171,11 +185,12 @@ export default {
        type: '',
        applicant: '',
        name: '',
-       performer: ''  
+       performer: '',
+       time: ''
      }
     }
   },
-//aasdasdasd
+
   methods: {
     // окно для редактирования данных 
     openAddPopup() {
@@ -184,7 +199,7 @@ export default {
     },
     // Добавление заявки
     addRequest() {
-      let form = document.getElementById('add-popup-form');
+      let form = document.getElementById('add-popup-form'); 
       let lastId = this.items[this.items.length - 1].id + 1;
       let id = lastId;
       let organization = form.elements.organization.value;
@@ -194,8 +209,9 @@ export default {
       let applicant = form.elements.applicant.value;
       let name = form.elements.name.value;
       let performer = form.elements.performer.value;
+      let timeValue = form.elements.timeValue.value;
       let obj = {
-        id, organization, status, priority, type, applicant, name, performer
+        id, organization, status, priority, type, applicant, name, performer,timeValue
       };
       this.items.push(obj);
     },
@@ -216,8 +232,9 @@ export default {
       let applicant = form.elements.applicant.value;
       let name = form.elements.name.value;
       let performer = form.elements.performer.value;
+      let timeValue = form.elements.timeValue.value;
       let obj = {
-        id, organization, status, priority, type, applicant, name, performer
+        id, organization, status, priority, type, applicant, name, performer,timeValue
       };
       for(let i in this.items) {
         if(obj.id == this.items[i].id) {
@@ -244,6 +261,7 @@ export default {
       this.currentRow.applicant = obj.applicant;
       this.currentRow.name = obj.name;
       this.currentRow.performer = obj.performer;
+      this.currentRow.timeValue = obj.time;
     },
     //закрытие окна редактирования окна
     closePopup(event) {
