@@ -175,7 +175,7 @@ export default {
      }
     }
   },
-
+//aasdasdasd
   methods: {
     // окно для редактирования данных 
     openAddPopup() {
