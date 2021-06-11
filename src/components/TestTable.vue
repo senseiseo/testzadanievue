@@ -37,7 +37,7 @@
               </thead>
 
               <tbody  style="background: #ccc">
-               <tr v-for="item in items" v-bind:key="item.id">
+               <tr v-for="(item) in items" v-bind:key="item.id">
                 <td> {{item.organization}} </td>
                 <td> {{item.status}} </td>
                 <td> {{item.priority}} </td>
@@ -218,10 +218,11 @@ export default {
       };
       this.items.push(obj);
     },
-    deleteRequest(event)
+    deleteRequest(id)
     // удаление заявки 
     {
-      event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+      this.items.splice(id, 1)
+    //  event.target.parentNode.parentNode.removeChild(event.target.parentNode);
     },
     editRequest()
     // редактирование заявки 
