@@ -37,7 +37,7 @@
               </thead>
 
               <tbody  style="background: #ccc">
-               <tr v-for="(item) in items" v-bind:key="item.id">
+               <tr v-for="(item, i) in items" v-bind:key="item.id">
                 <td> {{item.organization}} </td>
                 <td> {{item.status}} </td>
                 <td> {{item.priority}} </td>
@@ -47,7 +47,7 @@
                 <td> {{item.performer}} </td>
                 <td> {{item.time}} </td>
                 <button :data-id="item.id" type="button" class="edit" v-bind:id="item.id" @click="openEditRequestForm">Редактировать заявку</button>
-                <button type="button" class="delete" @click="deleteRequest">Удалить заявку</button>
+                <button type="button" class="delete" @click="deleteRequest(i)">Удалить заявку</button>
                </tr> 
               </tbody>
              </table>
@@ -218,10 +218,12 @@ export default {
       };
       this.items.push(obj);
     },
-    deleteRequest(id)
+    deleteRequest(i)
     // удаление заявки 
     {
-      this.items.splice(id, 1)
+       console.log('deleteRequest', i)
+      this.items.splice(i, 1)
+     
     //  event.target.parentNode.parentNode.removeChild(event.target.parentNode);
     },
     editRequest()
