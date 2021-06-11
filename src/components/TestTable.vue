@@ -1,8 +1,6 @@
 <template>
   <div>
-   <h1> {{timeValue}} </h1>
-
-     <button type="button" id="add-request" v-on:click="openAddPopup">Добавить заявку</button>
+     <button type="button" id="add-request" @click="openAddPopup">Добавить заявку</button>
      <br>
      <br>
      <table class="filters__table" style="width: 600px;">
@@ -138,11 +136,10 @@
 <script>
 export default {
   name: 'TestTable',
- 
   data() {
     return {
       // создаем массив данных
-      
+      popup: false,
      items: [           
        {
          id: 1,
@@ -197,13 +194,17 @@ export default {
     // окно для редактирования данных 
     openAddPopup() {
       let popup = document.getElementById('add-request-popup');
-      popup.classList.remove('hidden');
+      if(popup.classList.contains('hidden') && this.popup === false) {
+        let form = document.getElementById('add-popup-form');
+        form.reset();
+        popup.classList.remove('hidden');
+        this.popup = true;
+      }
     },
     // Добавление заявки
     addRequest() {
-      let form = document.getElementById('add-popup-form'); 
+      let form = document.getElementById('add-popup-form');
       let lastId = this.items[this.items.length - 1].id + 1;
-      console.log(lastId)
       let id = lastId;
       let organization = form.elements.organization.value;
       let status = form.elements.status.value;
@@ -212,11 +213,14 @@ export default {
       let applicant = form.elements.applicant.value;
       let name = form.elements.name.value;
       let performer = form.elements.performer.value;
-      let time = form.elements.time.value;
       let obj = {
-        id, organization, status, priority, type, applicant, name, performer,time
+        id, organization, status, priority, type, applicant, name, performer
       };
       this.items.push(obj);
+      form.parentNode.classList.add('hidden');
+      this.popup = false;
+      console.log(this.items);
+      
     },
     deleteRequest(i)
     // удаление заявки 
@@ -226,9 +230,7 @@ export default {
      
     //  event.target.parentNode.parentNode.removeChild(event.target.parentNode);
     },
-    editRequest()
-    // редактирование заявки 
-    {
+    editRequest() {
       let form = document.getElementById('popup-form');
       let id = form.elements.id.value;
       let organization = form.elements.organization.value;
@@ -238,9 +240,8 @@ export default {
       let applicant = form.elements.applicant.value;
       let name = form.elements.name.value;
       let performer = form.elements.performer.value;
-      let time = form.elements.time.value;
       let obj = {
-        id, organization, status, priority, type, applicant, name, performer,time
+        id, organization, status, priority, type, applicant, name, performer
       };
       for(let i in this.items) {
         if(obj.id == this.items[i].id) {
@@ -255,25 +256,25 @@ export default {
     // открыытие формы для редактирование заявки
     openEditRequestForm(event) {
       let popup = document.getElementById('edit-request-popup');
-      if(popup.classList.contains('hidden')) {
+      if(popup.classList.contains('hidden') && this.popup === false) {
         popup.classList.remove('hidden');
+        this.popup = true;
+        let obj = this.items[event.target.id - 1];
+        this.currentRow.id = obj.id;
+        this.currentRow.organization = obj.organization;
+        this.currentRow.status = obj.status;
+        this.currentRow.priority = obj.priority;
+        this.currentRow.type = obj.type;
+        this.currentRow.applicant = obj.applicant;
+        this.currentRow.name = obj.name;
+        this.currentRow.performer = obj.performer;
       }
-      let obj = this.items[event.target.id - 1];
-      this.currentRow.id = obj.id;
-      this.currentRow.organization = obj.organization;
-      this.currentRow.status = obj.status;
-      this.currentRow.priority = obj.priority;
-      this.currentRow.type = obj.type;
-      this.currentRow.applicant = obj.applicant;
-      this.currentRow.name = obj.name;
-      this.currentRow.performer = obj.performer;
-      this.currentRow.time = obj.time;
     },
-    //закрытие окна редактирования окна
     closePopup(event) {
       let popup = document.getElementById(event.target.parentNode.parentNode.id);
       if(!popup.classList.contains('hidden')) {
         popup.classList.add('hidden');
+        this.popup = false;
       }
     }
   }
